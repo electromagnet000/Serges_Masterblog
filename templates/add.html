@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add post</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="post_details">
+    <h1>Lets make a new post</h1>
+    <form method="POST" action="/add">
+    <label for="title">What is the title for this post? : </label><br>
+    <input type="text" id="title" name="title" required><br>
+    <label for="author">Who is the author? : </label><br>
+    <input type="text" id="author" name="author" required><br>
+    <label for="content">What is the content summery for this post? : </label><br>
+    <input type="text" id="content" name="content" required><br>
+    <input type="submit" value="Submit">
+
+</form>
+    </div>
+
+</body>
+</html>
