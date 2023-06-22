@@ -60,21 +60,33 @@ def add():
 
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
 def update(post_id):
-    # Fetch the blog posts from the JSON file
-    post = fetch_post_by_id(post_id)
+    with open("blog_data.json", "r") as data:
+        blog_data = json.load(data)
 
-    if post is None:
-        # Post not found
-        return "Post not found", 404
+        blog_update = None
 
-    if request.method == 'POST':
-        pass
-    # Update the post in the JSON file
-    # Redirect back to index
+        for post_data in blog_data:
+            if post_data['id'] == post_id:
+                blog_update = post_data
 
-    # Else, it's a GET request
-    # So display the update.html page
-    return render_template('update.html', post=post)
+        if request.method == "POST":
+
+            new_author = request.form.get("author")
+            new_title = request.form.get("title")
+            new_content = request.form.get("content")
+
+            for new_data in blog_data:
+                if post_id == new_data['id']:
+                    new_data["author"] = new_author
+                    new_data["title"] = new_title
+                    new_data["content"] = new_content
+
+                    with open("blog_data.json", "w") as new_file:
+                        json.dump(blog_data, new_file)
+                        return redirect(url_for("index"))
+
+        return render_template("update.html", post=blog_update)
+
 
 
 @app.route("/delete", methods=["GET","POST"])

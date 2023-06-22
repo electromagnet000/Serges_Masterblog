@@ -28,12 +28,11 @@
         <h2>{{details["title"]}}</h2>
         <p><em>Written by {{details["author"]}}</em></p>
         <p>Summery : {{details["content"]}}</p>
-    <form method="POST", action="/update">
-    <input class="button" type="button" value="Update">
+    <form method="GET" action="/update/{{user}}">
+    <input class="button" type="submit" value="Update">
     </form>
     </div>
     {% endfor %}
-
 
 
 </body>
