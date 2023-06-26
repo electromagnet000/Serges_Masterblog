@@ -4,7 +4,7 @@ import json
 app = Flask(__name__)
 
 
-
+# develops the inital html page
 @app.route('/')
 def index():
     with open("blog_data.json", "r") as json_file:
@@ -26,7 +26,7 @@ def index():
 
     return render_template('index.html', posts=reversed_blog_order)
 
-
+#adds an additional post
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == "POST":
@@ -57,30 +57,32 @@ def add():
 
     return render_template('add.html')
 
-
+#updates a chosen post
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
 def update(post_id):
     with open("blog_data.json", "r") as data:
         blog_data = json.load(data)
 
         blog_update = None
-
+        # checks if the post_data id matches the chosen post ID does nothing if a post is not chosen
         for post_data in blog_data:
             if post_data['id'] == post_id:
                 blog_update = post_data
 
         if request.method == "POST":
 
+            #gets the new values
             new_author = request.form.get("author")
             new_title = request.form.get("title")
             new_content = request.form.get("content")
 
+            #assigns the new values
             for new_data in blog_data:
                 if post_id == new_data['id']:
                     new_data["author"] = new_author
                     new_data["title"] = new_title
                     new_data["content"] = new_content
-
+                    #replaces old data with new data
                     with open("blog_data.json", "w") as new_file:
                         json.dump(blog_data, new_file)
                         return redirect(url_for("index"))
@@ -88,7 +90,7 @@ def update(post_id):
         return render_template("update.html", post=blog_update)
 
 
-
+#deletes a chosen post
 @app.route("/delete", methods=["GET","POST"])
 def delete():
     if request.method == "POST":
@@ -113,7 +115,7 @@ def delete():
             return redirect(url_for("index"))
 
 
-
+    #opens a html file that shows posts with a delete function next to them
     with open("blog_data.json", "r") as json_file:
         blog_data = json.load(json_file)
 
@@ -134,7 +136,7 @@ def delete():
         return render_template("delete.html", posts=reversed_blog_order)
 
 
-
+#if a page is not found then the 404 will handle that unknown exception
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template("404.html"), 404
